@@ -1,103 +1,105 @@
 import React, { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const About = () => {
-  const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState([]);
-  const [isVisible, setIsVisible] = useState({
-    timeline: false,
-    skills: false,
-    hero: false,
-  });
-  const canvasRef = useRef(null);
   const profileRef = useRef(null);
   const heroRef = useRef(null);
   const timelineRef = useRef(null);
   const skillsRef = useRef(null);
-
-  // Initialize particles
-  useEffect(() => {
-    const particleArray = [];
-    for (let i = 0; i < 50; i++) {
-      particleArray.push({
-        id: i,
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        size: Math.random() * 4 + 1,
-        speedX: (Math.random() - 0.5) * 1,
-        speedY: (Math.random() - 0.5) * 1,
-        opacity: Math.random() * 0.8 + 0.2,
-        color: Math.random() > 0.5 ? "rgba(99, 102, 241" : "rgba(168, 85, 247",
-      });
-    }
-    setParticles(particleArray);
-  }, []);
+  const timelineItemsRef = useRef([]);
+  const skillItemsRef = useRef([]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-
-      // Check visibility for animations
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const isHeroVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible((prev) => ({ ...prev, hero: isHeroVisible }));
-      }
-
-      if (timelineRef.current) {
-        const rect = timelineRef.current.getBoundingClientRect();
-        const isTimelineVisible =
-          rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible((prev) => ({ ...prev, timeline: isTimelineVisible }));
-      }
-
-      if (skillsRef.current) {
-        const rect = skillsRef.current.getBoundingClientRect();
-        const isSkillsVisible =
-          rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible((prev) => ({ ...prev, skills: isSkillsVisible }));
-      }
-    };
-
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener("scroll", handleScroll);
     window.addEventListener("mousemove", handleMouseMove);
-    handleScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
-  // Animate particles
+  // GSAP Animations
   useEffect(() => {
-    const interval = setInterval(() => {
-      setParticles((prevParticles) =>
-        prevParticles.map((particle) => {
-          let newX = particle.x + particle.speedX;
-          let newY = particle.y + particle.speedY;
-
-          // Wrap around edges
-          if (newX > window.innerWidth + 50) newX = -50;
-          if (newX < -50) newX = window.innerWidth + 50;
-          if (newY > window.innerHeight + 50) newY = -50;
-          if (newY < -50) newY = window.innerHeight + 50;
-
-          return {
-            ...particle,
-            x: newX,
-            y: newY,
-          };
-        })
+    // Hero section animations
+    if (heroRef.current) {
+      gsap.fromTo(
+        heroRef.current.querySelector(".glass-premium"),
+        {
+          opacity: 0,
+          y: 80,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: "power3.out",
+        }
       );
-    }, 50);
+    }
 
-    return () => clearInterval(interval);
+    // Timeline animations
+    if (timelineItemsRef.current.length > 0) {
+      timelineItemsRef.current.forEach((item, index) => {
+        gsap.fromTo(
+          item,
+          {
+            opacity: 0,
+            y: 50,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: index * 0.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    }
+
+    // Skills animations
+    if (skillItemsRef.current.length > 0) {
+      skillItemsRef.current.forEach((skill, index) => {
+        gsap.fromTo(
+          skill,
+          {
+            opacity: 0,
+            scale: 0.8,
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.6,
+            delay: index * 0.1,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: skill,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
   }, []);
+
+
 
   const timelineData = [
     {
@@ -214,24 +216,7 @@ const About = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
       </div>
 
-      {/* Animated Particles */}
-      <div className="fixed inset-0 pointer-events-none">
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className="absolute rounded-full"
-            style={{
-              left: `${particle.x}px`,
-              top: `${particle.y}px`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              backgroundColor: `${particle.color}, ${particle.opacity})`,
-              boxShadow: `0 0 ${particle.size * 2}px ${particle.color}, ${particle.opacity / 2})`,
-              transition: "all 0.05s linear",
-            }}
-          />
-        ))}
-      </div>
+
 
       {/* Main Content */}
       <div className="relative z-10 px-6 py-12">
@@ -301,19 +286,14 @@ const About = () => {
             {/* Premium Glass Card */}
             <div className="w-full lg:w-3/5 flex items-center">
               <div
-                className={`glass-premium rounded-3xl p-8 lg:p-12 shadow-2xl transform transition-all duration-1000 ${
-                  isVisible.hero
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-20 opacity-0"
-                }`}
+                className="glass-premium rounded-3xl p-8 lg:p-12 shadow-2xl"
                 style={{
                   transform: `
                     perspective(1000px) 
                     rotateY(${-transform.rotateY * 0.3}deg) 
                     rotateX(${-transform.rotateX * 0.3}deg)
-                    translateY(${isVisible.hero ? 0 : 80}px)
                   `,
-                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+                  transition: "transform 0.1s ease-out",
                 }}
               >
                 <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
@@ -384,10 +364,10 @@ const About = () => {
               {timelineData.map((item, index) => (
                 <div
                   key={index}
+                  ref={(el) => (timelineItemsRef.current[index] = el)}
                   className={`relative flex items-center mb-12 ${
                     index % 2 === 0 ? "justify-start" : "justify-end"
-                  } ${isVisible.timeline ? "animate-fadeInUp" : "opacity-0"}`}
-                  style={{ animationDelay: `${index * 0.2}s` }}
+                  }`}
                 >
                   <div
                     className={`w-5/12 ${index % 2 === 0 ? "text-right pr-8" : "text-left pl-8"}`}
@@ -442,15 +422,13 @@ const About = () => {
               Technical Skills
             </h2>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {skillsData.map((skill, index) => (
-                <div
-                  key={skill.name}
-                  className={`glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center ${
-                    isVisible.skills ? "animate-fadeInUp" : "opacity-0"
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
+             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+               {skillsData.map((skill, index) => (
+                 <div
+                   key={skill.name}
+                   ref={(el) => (skillItemsRef.current[index] = el)}
+                   className="glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center"
+                 >
                   <img
                     src={skill.logo}
                     alt={skill.name}
@@ -484,18 +462,8 @@ const About = () => {
         </div>
       </div>
 
-      {/* Custom Styles */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+       {/* Custom Styles */}
+       <style jsx>{`
 
         @keyframes gradientShift {
           0% {

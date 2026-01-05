@@ -1,15 +1,138 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Contact = () => {
   const [isHovered, setIsHovered] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [particles] = useState(() => {
+    const particleArray = [];
+    for (let i = 0; i < 30; i++) {
+      particleArray.push({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        animationDelay: `${Math.random() * 5}s`,
+        opacity: Math.random() * 0.5 + 0.2,
+      });
+    }
+    return particleArray;
+  });
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const ctaButtonRef = useRef(null);
+  const socialCardsRef = useRef([]);
+  const footerRef = useRef(null);
 
+  // GSAP Animations
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    // Title animation
+    if (titleRef.current) {
+      gsap.fromTo(
+        titleRef.current,
+        {
+          opacity: 0,
+          y: -50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        }
+      );
+    }
+
+    // Description animation
+    if (descriptionRef.current) {
+      gsap.fromTo(
+        descriptionRef.current,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: 0.2,
+          ease: "power2.out",
+        }
+      );
+    }
+
+    // CTA Button animation
+    if (ctaButtonRef.current) {
+      gsap.fromTo(
+        ctaButtonRef.current,
+        {
+          opacity: 0,
+          scale: 0.8,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          delay: 0.4,
+          ease: "back.out(1.7)",
+        }
+      );
+    }
+
+    // Social cards animations
+    if (socialCardsRef.current.length > 0) {
+      socialCardsRef.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          {
+            opacity: 0,
+            y: 50,
+            rotation: 5,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            rotation: 0,
+            duration: 0.6,
+            delay: 0.6 + index * 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    }
+
+    // Footer animation
+    if (footerRef.current) {
+      gsap.fromTo(
+        footerRef.current,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 90%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const socialLinks = [
@@ -56,15 +179,15 @@ const Contact = () => {
 
       {/* Animated Particles Background */}
       <div className="fixed inset-0 pointer-events-none">
-        {[...Array(30)].map((_, i) => (
+        {particles.map((particle) => (
           <div
-            key={i}
+            key={particle.id}
             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              opacity: Math.random() * 0.5 + 0.2
+              left: particle.left,
+              top: particle.top,
+              animationDelay: particle.animationDelay,
+              opacity: particle.opacity
             }}
           />
         ))}
@@ -75,21 +198,21 @@ const Contact = () => {
         <div className="container mx-auto max-w-4xl text-center">
           {/* Animated Title */}
           <div className="mb-8">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradientShift mb-4">
+            <h2 ref={titleRef} className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradientShift mb-4">
               Get In Touch 🤝
             </h2>
             <div className="w-32 h-1 mx-auto bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
           </div>
 
           {/* Description with Emoji */}
-          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p ref={descriptionRef} className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
             I'm currently open to new opportunities and collaborations 🌟 
             Whether you have a question or just want to say hi 👋, 
             I'll try my best to get back to you! 📧
           </p>
 
           {/* Premium CTA Button */}
-          <div className="relative inline-block mb-20 group">
+          <div ref={ctaButtonRef} className="relative inline-block mb-20 group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
             <a 
               href="mailto:hello@example.com" 
@@ -108,7 +231,7 @@ const Contact = () => {
             </h3>
             
             <div className="flex justify-center gap-6 flex-wrap">
-              {socialLinks.map((social) => (
+              {socialLinks.map((social, index) => (
                 <div
                   key={social.name}
                   className="relative group"
@@ -119,33 +242,38 @@ const Contact = () => {
                   <div className={`absolute inset-0 ${social.color.split(' ')[1]} rounded-2xl blur-lg opacity-0 group-hover:opacity-60 transition-all duration-300 scale-110`}></div>
                   
                   {/* Social Card */}
-                  <a
-                    href={social.url}
-                    className={`relative glass-premium rounded-2xl p-6 flex flex-col items-center gap-3 transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 ${social.color} border border-white/10 hover:border-white/30`}
+                  <div
+                    ref={(el) => (socialCardsRef.current[index] = el)}
+                    className="relative"
                   >
-                    {/* Emoji/Icon Display */}
-                    <div className="relative w-16 h-16 flex items-center justify-center">
-                      {isHovered === social.name ? (
-                        <span className="text-3xl animate-bounce">{social.hoverEmoji}</span>
-                      ) : (
-                        <img 
-                          src={social.icon} 
-                          alt={social.name}
-                          className="w-full h-full object-contain filter brightness-0 invert"
-                        />
-                      )}
-                    </div>
-                    
-                    <span className="text-white font-semibold">{social.name}</span>
-                    <span className="text-sm text-gray-300">{social.emoji}</span>
-                  </a>
+                    <a
+                      href={social.url}
+                      className={`relative glass-premium rounded-2xl p-6 flex flex-col items-center gap-3 transition-all duration-300 transform hover:scale-110 hover:-translate-y-2 ${social.color} border border-white/10 hover:border-white/30`}
+                    >
+                      {/* Emoji/Icon Display */}
+                      <div className="relative w-16 h-16 flex items-center justify-center">
+                        {isHovered === social.name ? (
+                          <span className="text-3xl animate-bounce">{social.hoverEmoji}</span>
+                        ) : (
+                          <img 
+                            src={social.icon} 
+                            alt={social.name}
+                            className="w-full h-full object-contain filter brightness-0 invert"
+                          />
+                        )}
+                      </div>
+                      
+                      <span className="text-white font-semibold">{social.name}</span>
+                      <span className="text-sm text-gray-300">{social.emoji}</span>
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Enhanced Footer */}
-          <div className="glass-premium-secondary rounded-2xl p-6 mt-12">
+          <div ref={footerRef} className="glass-premium-secondary rounded-2xl p-6 mt-12">
             <footer className="text-gray-300">
               <p className="mb-2 flex items-center justify-center gap-2">
                 <span className="animate-pulse">❤️</span>

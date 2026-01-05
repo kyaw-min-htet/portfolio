@@ -1,25 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Projects = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const projectsSection = document.getElementById('projects');
-      if (projectsSection) {
-        const rect = projectsSection.getBoundingClientRect();
-        const isProjectsVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible(isProjectsVisible);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  const projectCardsRef = useRef([]);
+  const titleRef = useRef(null);
 
   const projects = [
     {
@@ -45,6 +32,57 @@ const Projects = () => {
     },
   ];
 
+  // GSAP Animations
+  useEffect(() => {
+    // Title animation
+    if (titleRef.current) {
+      gsap.fromTo(
+        titleRef.current,
+        {
+          opacity: 0,
+          y: -50,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power3.out",
+        }
+      );
+    }
+
+    // Project cards animations
+    if (projectCardsRef.current.length > 0) {
+      projectCardsRef.current.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          {
+            opacity: 0,
+            y: 60,
+            scale: 0.9,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.8,
+            delay: index * 0.2,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      });
+    }
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   return (
     <section id="projects" className="relative min-h-screen overflow-hidden">
       {/* Premium Background */}
@@ -55,7 +93,7 @@ const Projects = () => {
       {/* Main Content */}
       <div className="relative z-10 px-6 py-20">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 ref={titleRef} className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             Featured Projects
           </h2>
           
@@ -63,10 +101,8 @@ const Projects = () => {
             {projects.map((project, index) => (
               <div 
                 key={index} 
-                className={`glass-premium rounded-3xl overflow-hidden hover:scale-105 transition-all duration-500 flex flex-col ${
-                  isVisible ? 'animate-fadeInUp' : 'opacity-0'
-                }`}
-                style={{ animationDelay: `${index * 0.2}s` }}
+                ref={(el) => (projectCardsRef.current[index] = el)}
+                className="glass-premium rounded-3xl overflow-hidden hover:scale-105 transition-all duration-500 flex flex-col"
               >
                 {/* Premium Header with Gradient */}
                 <div className={`h-48 bg-gradient-to-br ${project.gradient} relative overflow-hidden group`}>
@@ -128,21 +164,6 @@ const Projects = () => {
 
       {/* Custom Styles */}
       <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-        
         .glass-premium {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(20px) saturate(180%);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,22 +29,23 @@ const Navbar = () => {
       "(prefers-color-scheme: dark)"
     ).matches;
 
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      setIsDarkMode(true);
+    const shouldBeDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+    if (shouldBeDark) {
       document.documentElement.classList.add("dark");
     }
   }, []);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
+  const toggleDarkMode = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+    const newDarkMode = !isDarkMode;
+    if (newDarkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
-  };
+  }, [isDarkMode]);
 
   // Active section detection
   useEffect(() => {
@@ -158,7 +159,7 @@ if (e.altKey) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, toggleDarkMode]);
 
   // Mouse tracking for magnetic effect
   useEffect(() => {
@@ -603,21 +604,24 @@ if (e.altKey) {
           >
             {navLinks.map((link, index) => (
               <li key={link.title}>
-                <a
-                  ref={(el) => (linkRefs.current[index] = el)}
-                  href={link.href}
-                  className={`relative px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus ${
-                    hoveredLink !== null ? "staggered-link" : ""
-                  } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20" : "hover:bg-gray-100/50 dark:hover:bg-white/10"}`}
-                  style={{
-                    transform:
-                      hoveredLink === index
-                        ? `translate(${calculateMagneticEffect(linkRefs.current[index], mousePosition.x, mousePosition.y).x}px, ${calculateMagneticEffect(linkRefs.current[index], mousePosition.x, mousePosition.y).y}px)`
-                        : "translate(0, 0)",
-                  }}
-                  aria-label={`Navigate to ${link.title} section (Alt+${index + 1})`}
-                  tabIndex={0}
-                >
+                 <a
+                   ref={(el) => {
+                     linkRefs.current[index] = el;
+                     if (el && hoveredLink === index) {
+                       const effect = calculateMagneticEffect(el, mousePosition.x, mousePosition.y);
+                       el.style.transform = `translate(${effect.x}px, ${effect.y}px)`;
+                     } else if (el) {
+                       el.style.transform = "translate(0, 0)";
+                     }
+                   }}
+                   href={link.href}
+                   className={`relative px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus ${
+                     hoveredLink !== null ? "staggered-link" : ""
+                   } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20" : "hover:bg-gray-100/50 dark:hover:bg-white/10"}`}
+                   onMouseEnter={() => handleLinkHover(index)}
+                   aria-label={`Navigate to ${link.title} section (Alt+${index + 1})`}
+                   tabIndex={0}
+                 >
                   <span className="relative z-10">{link.title}</span>
                 </a>
               </li>
