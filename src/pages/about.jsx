@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const About = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -7,7 +7,7 @@ const About = () => {
   const [isVisible, setIsVisible] = useState({
     timeline: false,
     skills: false,
-    hero: false
+    hero: false,
   });
   const canvasRef = useRef(null);
   const profileRef = useRef(null);
@@ -27,7 +27,7 @@ const About = () => {
         speedX: (Math.random() - 0.5) * 1,
         speedY: (Math.random() - 0.5) * 1,
         opacity: Math.random() * 0.8 + 0.2,
-        color: Math.random() > 0.5 ? 'rgba(99, 102, 241' : 'rgba(168, 85, 247'
+        color: Math.random() > 0.5 ? "rgba(99, 102, 241" : "rgba(168, 85, 247",
       });
     }
     setParticles(particleArray);
@@ -41,19 +41,21 @@ const About = () => {
       if (heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect();
         const isHeroVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible(prev => ({ ...prev, hero: isHeroVisible }));
+        setIsVisible((prev) => ({ ...prev, hero: isHeroVisible }));
       }
 
       if (timelineRef.current) {
         const rect = timelineRef.current.getBoundingClientRect();
-        const isTimelineVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible(prev => ({ ...prev, timeline: isTimelineVisible }));
+        const isTimelineVisible =
+          rect.top < window.innerHeight && rect.bottom > 0;
+        setIsVisible((prev) => ({ ...prev, timeline: isTimelineVisible }));
       }
 
       if (skillsRef.current) {
         const rect = skillsRef.current.getBoundingClientRect();
-        const isSkillsVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        setIsVisible(prev => ({ ...prev, skills: isSkillsVisible }));
+        const isSkillsVisible =
+          rect.top < window.innerHeight && rect.bottom > 0;
+        setIsVisible((prev) => ({ ...prev, skills: isSkillsVisible }));
       }
     };
 
@@ -61,21 +63,21 @@ const About = () => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("mousemove", handleMouseMove);
     handleScroll();
-    
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
   // Animate particles
   useEffect(() => {
     const interval = setInterval(() => {
-      setParticles(prevParticles => 
-        prevParticles.map(particle => {
+      setParticles((prevParticles) =>
+        prevParticles.map((particle) => {
           let newX = particle.x + particle.speedX;
           let newY = particle.y + particle.speedY;
 
@@ -88,7 +90,7 @@ const About = () => {
           return {
             ...particle,
             x: newX,
-            y: newY
+            y: newY,
           };
         })
       );
@@ -102,45 +104,89 @@ const About = () => {
       year: "2020",
       title: "Full Stack Developer",
       company: "Tech Innovations Inc.",
-      description: "Led development of enterprise-scale applications using React and Node.js, serving 100k+ users.",
+      description:
+        "Led development of enterprise-scale applications using React and Node.js, serving 100k+ users.",
       technologies: ["React", "Node.js", "MongoDB", "AWS"],
-      type: "work"
+      type: "work",
     },
     {
       year: "2019",
       title: "Frontend Developer",
       company: "Digital Agency Pro",
-      description: "Built responsive web applications for high-profile clients, improving performance by 40%.",
+      description:
+        "Built responsive web applications for high-profile clients, improving performance by 40%.",
       technologies: ["Vue.js", "JavaScript", "SASS", "Webpack"],
-      type: "work"
+      type: "work",
     },
     {
       year: "2018",
       title: "Junior Developer",
       company: "StartUp Hub",
-      description: "Developed and maintained multiple client projects, focusing on modern JavaScript frameworks.",
+      description:
+        "Developed and maintained multiple client projects, focusing on modern JavaScript frameworks.",
       technologies: ["JavaScript", "HTML", "CSS", "jQuery"],
-      type: "work"
+      type: "work",
     },
     {
       year: "2017",
       title: "Computer Science Degree",
       company: "University of Technology",
-      description: "Graduated with honors, specializing in Software Engineering and Web Development.",
+      description:
+        "Graduated with honors, specializing in Software Engineering and Web Development.",
       technologies: ["Algorithms", "Data Structures", "Web Development"],
-      type: "education"
-    }
+      type: "education",
+    },
   ];
 
   const skillsData = [
-    { name: "React", level: 95, color: "from-blue-400 to-blue-600", icon: "⚛️" },
-    { name: "JavaScript", level: 90, color: "from-yellow-400 to-orange-600", icon: "📜" },
-    { name: "Node.js", level: 85, color: "from-green-400 to-green-600", icon: "🟢" },
-    { name: "TypeScript", level: 80, color: "from-blue-500 to-blue-700", icon: "📘" },
-    { name: "Python", level: 75, color: "from-indigo-400 to-indigo-600", icon: "🐍" },
-    { name: "MongoDB", level: 82, color: "from-green-500 to-emerald-600", icon: "🍃" },
-    { name: "AWS", level: 70, color: "from-orange-400 to-orange-600", icon: "☁️" },
-    { name: "Docker", level: 65, color: "from-cyan-400 to-cyan-600", icon: "🐳" }
+    {
+      name: "React",
+      level: 95,
+      color: "from-blue-400 to-blue-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+    },
+    {
+      name: "JavaScript",
+      level: 90,
+      color: "from-yellow-400 to-orange-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+    },
+    {
+      name: "Node.js",
+      level: 85,
+      color: "from-green-400 to-green-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    },
+    {
+      name: "TypeScript",
+      level: 80,
+      color: "from-blue-500 to-blue-700",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    },
+    {
+      name: "Python",
+      level: 75,
+      color: "from-indigo-400 to-indigo-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    },
+    {
+      name: "MongoDB",
+      level: 82,
+      color: "from-green-500 to-emerald-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+    },
+    {
+      name: "AWS",
+      level: 70,
+      color: "from-orange-400 to-orange-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg",
+    },
+    {
+      name: "Docker",
+      level: 65,
+      color: "from-cyan-400 to-cyan-600",
+      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+    },
   ];
 
   // Calculate 3D transforms based on mouse and scroll
@@ -149,13 +195,13 @@ const About = () => {
     const centerY = window.innerHeight / 2;
     const moveX = (mousePosition.x - centerX) / centerX;
     const moveY = (mousePosition.y - centerY) / centerY;
-    
+
     return {
       rotateY: moveX * 15,
       rotateX: -moveY * 15,
       rotateZ: scrollY * 0.05,
       translateX: moveX * 10,
-      translateY: moveY * 10
+      translateY: moveY * 10,
     };
   };
 
@@ -170,7 +216,7 @@ const About = () => {
 
       {/* Animated Particles */}
       <div className="fixed inset-0 pointer-events-none">
-        {particles.map(particle => (
+        {particles.map((particle) => (
           <div
             key={particle.id}
             className="absolute rounded-full"
@@ -181,7 +227,7 @@ const About = () => {
               height: `${particle.size}px`,
               backgroundColor: `${particle.color}, ${particle.opacity})`,
               boxShadow: `0 0 ${particle.size * 2}px ${particle.color}, ${particle.opacity / 2})`,
-              transition: 'all 0.05s linear'
+              transition: "all 0.05s linear",
             }}
           />
         ))}
@@ -190,10 +236,11 @@ const About = () => {
       {/* Main Content */}
       <div className="relative z-10 px-6 py-12">
         <div className="container mx-auto max-w-7xl">
-          
           {/* Enhanced Hero Section */}
-          <div ref={heroRef} className="flex flex-col lg:flex-row items-center gap-12 mb-20 min-h-screen">
-            
+          <div
+            ref={heroRef}
+            className="flex flex-col lg:flex-row items-center gap-12 mb-20 min-h-screen"
+          >
             {/* Advanced Profile Image with 3D Perspective */}
             <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
               <div
@@ -201,18 +248,18 @@ const About = () => {
                 className="relative w-80 h-80 lg:w-96 lg:h-96"
                 style={{
                   transform: `perspective(1000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) rotateZ(${transform.rotateZ}deg) translateX(${transform.translateX}px) translateY(${transform.translateY}px)`,
-                  transformStyle: 'preserve-3d',
-                  transition: 'transform 0.1s ease-out'
+                  transformStyle: "preserve-3d",
+                  transition: "transform 0.1s ease-out",
                 }}
               >
                 {/* Animated Gradient Border */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-rotateBorder p-1">
                   <div className="w-full h-full rounded-full bg-gray-900"></div>
                 </div>
-                
+
                 {/* Inner Glow Ring */}
                 <div className="absolute inset-4 rounded-full bg-gradient-to-r from-blue-600/50 to-purple-600/50 blur-xl animate-pulse"></div>
-                
+
                 {/* Profile Content */}
                 <div className="absolute inset-8 rounded-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white">
                   <div className="w-24 h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mb-4 animate-float">
@@ -221,13 +268,15 @@ const About = () => {
                   <h3 className="text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                     John Developer
                   </h3>
-                  <p className="text-sm lg:text-base text-gray-300">Full Stack Engineer</p>
-                  
+                  <p className="text-sm lg:text-base text-gray-300">
+                    Full Stack Engineer
+                  </p>
+
                   {/* Animated Lighting Effect */}
-                  <div 
+                  <div
                     className="absolute inset-0 rounded-full opacity-30"
                     style={{
-                      background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.5), transparent 40%)`
+                      background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.5), transparent 40%)`,
                     }}
                   />
                 </div>
@@ -241,7 +290,7 @@ const About = () => {
                       style={{
                         top: `${20 + i * 15}%`,
                         left: `${10 + i * 15}%`,
-                        animationDelay: `${i * 0.5}s`
+                        animationDelay: `${i * 0.5}s`,
                       }}
                     />
                   ))}
@@ -253,7 +302,9 @@ const About = () => {
             <div className="w-full lg:w-3/5 flex items-center">
               <div
                 className={`glass-premium rounded-3xl p-8 lg:p-12 shadow-2xl transform transition-all duration-1000 ${
-                  isVisible.hero ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+                  isVisible.hero
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-20 opacity-0"
                 }`}
                 style={{
                   transform: `
@@ -262,55 +313,58 @@ const About = () => {
                     rotateX(${-transform.rotateX * 0.3}deg)
                     translateY(${isVisible.hero ? 0 : 80}px)
                   `,
-                  transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
                 <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
-                  Hi, I'm a{' '}
+                  Hi, I'm a{" "}
                   <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradientShift">
                     Full-Stack Developer
                   </span>
                 </h1>
-                
+
                 <p className="text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed">
-                  I specialize in building modern web applications using React, Node.js, and other cutting-edge technologies. With a strong foundation in both front-end aesthetics and back-end logic, I strive to deliver complete, robust solutions.
+                  I specialize in building modern web applications using React,
+                  Node.js, and other cutting-edge technologies. With a strong
+                  foundation in both front-end aesthetics and back-end logic, I
+                  strive to deliver complete, robust solutions.
                 </p>
-                
+
                 <p className="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
-                  When I'm not coding, you can find me exploring new tech trends, contributing to open source, or enjoying a good cup of coffee.
+                  When I'm not coding, you can find me exploring new tech
+                  trends, contributing to open source, or enjoying a good cup of
+                  coffee.
                 </p>
-                
+
                 {/* Premium CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                  <a
-                    href="#projects"
-                    className="relative group"
-                  >
+                  <a href="#projects" className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                     <button className="relative px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
                       View Projects
                     </button>
                   </a>
-                  
-                  <a
-                    href="#contact"
-                    className="relative group"
-                  >
+
+                  <a href="#contact" className="relative group">
                     <div className="absolute inset-0 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl"></div>
                     <button className="relative px-6 py-3 bg-transparent text-white rounded-xl font-bold border-2 border-white/30 hover:border-white/50 hover:bg-white/10 transition-all duration-300">
                       Contact Me
                     </button>
                   </a>
                 </div>
-                
+
                 {/* Stats Cards */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
-                    <h3 className="font-bold text-3xl text-blue-400 mb-1">5+</h3>
+                    <h3 className="font-bold text-3xl text-blue-400 mb-1">
+                      5+
+                    </h3>
                     <p className="text-gray-300">Years Experience</p>
                   </div>
                   <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
-                    <h3 className="font-bold text-3xl text-purple-400 mb-1">50+</h3>
+                    <h3 className="font-bold text-3xl text-purple-400 mb-1">
+                      50+
+                    </h3>
                     <p className="text-gray-300">Projects Completed</p>
                   </div>
                 </div>
@@ -326,28 +380,42 @@ const About = () => {
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 rounded-full"></div>
-              
+
               {timelineData.map((item, index) => (
                 <div
                   key={index}
                   className={`relative flex items-center mb-12 ${
-                    index % 2 === 0 ? 'justify-start' : 'justify-end'
-                  } ${isVisible.timeline ? 'animate-fadeInUp' : 'opacity-0'}`}
+                    index % 2 === 0 ? "justify-start" : "justify-end"
+                  } ${isVisible.timeline ? "animate-fadeInUp" : "opacity-0"}`}
                   style={{ animationDelay: `${index * 0.2}s` }}
                 >
-                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+                  <div
+                    className={`w-5/12 ${index % 2 === 0 ? "text-right pr-8" : "text-left pl-8"}`}
+                  >
                     <div className="glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          item.type === 'work' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'
-                        }`}>
-                          {item.type === 'work' ? '💼 Work' : '🎓 Education'}
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            item.type === "work"
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "bg-purple-500/20 text-purple-400"
+                          }`}
+                        >
+                          {item.type === "work" ? "💼 Work" : "🎓 Education"}
                         </span>
-                        <span className="text-sm text-gray-400">{item.year}</span>
+                        <span className="text-sm text-gray-400">
+                          {item.year}
+                        </span>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
-                      <p className="text-gray-300 font-medium mb-2">{item.company}</p>
-                      <p className="text-gray-400 text-sm mb-3">{item.description}</p>
+                      <h3 className="text-xl font-bold text-white mb-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-300 font-medium mb-2">
+                        {item.company}
+                      </p>
+                      <p className="text-gray-400 text-sm mb-3">
+                        {item.description}
+                      </p>
                       <div className="flex flex-wrap gap-2">
                         {item.technologies.map((tech, techIndex) => (
                           <span
@@ -360,7 +428,7 @@ const About = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Timeline dot */}
                   <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg z-10"></div>
                 </div>
@@ -373,38 +441,22 @@ const About = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               Technical Skills
             </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {skillsData.map((skill, index) => (
                 <div
                   key={skill.name}
-                  className={`glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer ${
-                    isVisible.skills ? 'animate-fadeInUp' : 'opacity-0'
+                  className={`glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center ${
+                    isVisible.skills ? "animate-fadeInUp" : "opacity-0"
                   }`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">{skill.icon}</span>
-                      <h3 className="font-bold text-white">{skill.name}</h3>
-                    </div>
-                    <span className="text-lg font-semibold text-gray-300">{skill.level}%</span>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className={`absolute top-0 left-0 h-full bg-gradient-to-r ${skill.color} rounded-full transform transition-all duration-1000 ease-out ${
-                        isVisible.skills ? 'scale-x-100' : 'scale-x-0'
-                      } origin-left`}
-                      style={{
-                        width: `${skill.level}%`,
-                        transitionDelay: `${index * 0.1}s`,
-                      }}
-                    >
-                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
-                    </div>
-                  </div>
+                  <img
+                    src={skill.logo}
+                    alt={skill.name}
+                    className="w-12 h-12 mb-3"
+                  />
+                  <h3 className="font-bold text-white text-center">{skill.name}</h3>
                 </div>
               ))}
             </div>
@@ -417,12 +469,11 @@ const About = () => {
                 Let's Build Something Amazing Together
               </h2>
               <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-                I'm always excited to work on challenging projects and collaborate with creative minds. Whether you have a project in mind or just want to connect, I'd love to hear from you!
+                I'm always excited to work on challenging projects and
+                collaborate with creative minds. Whether you have a project in
+                mind or just want to connect, I'd love to hear from you!
               </p>
-              <a
-                href="#contact"
-                className="inline-block relative group"
-              >
+              <a href="#contact" className="inline-block relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                 <button className="relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 shadow-lg">
                   Get In Touch
@@ -445,56 +496,71 @@ const About = () => {
             transform: translateY(0);
           }
         }
-        
+
         @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
         }
-        
+
         @keyframes rotateBorder {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
-        
+
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
-        
+
         .animate-fadeInUp {
           animation: fadeInUp 0.8s ease-out forwards;
         }
-        
+
         .animate-gradientShift {
           background-size: 200% 200%;
           animation: gradientShift 4s ease infinite;
         }
-        
+
         .animate-rotateBorder {
           animation: rotateBorder 8s linear infinite;
         }
-        
+
         .animate-float {
           animation: float 3s ease-in-out infinite;
         }
-        
+
         .glass-premium {
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
           border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 
+          box-shadow:
             0 8px 32px rgba(0, 0, 0, 0.3),
             0 2px 8px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
-        
+
         .glass-premium-secondary {
           background: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px) saturate(120%);
           -webkit-backdrop-filter: blur(10px) saturate(120%);
-          box-shadow: 
+          box-shadow:
             0 4px 16px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
