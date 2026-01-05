@@ -1,57 +1,505 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const About = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState([]);
+  const [isVisible, setIsVisible] = useState({
+    timeline: false,
+    skills: false,
+    hero: false
+  });
+  const canvasRef = useRef(null);
+  const profileRef = useRef(null);
+  const heroRef = useRef(null);
+  const timelineRef = useRef(null);
+  const skillsRef = useRef(null);
+
+  // Initialize particles
+  useEffect(() => {
+    const particleArray = [];
+    for (let i = 0; i < 50; i++) {
+      particleArray.push({
+        id: i,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 4 + 1,
+        speedX: (Math.random() - 0.5) * 1,
+        speedY: (Math.random() - 0.5) * 1,
+        opacity: Math.random() * 0.8 + 0.2,
+        color: Math.random() > 0.5 ? 'rgba(99, 102, 241' : 'rgba(168, 85, 247'
+      });
+    }
+    setParticles(particleArray);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+
+      // Check visibility for animations
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const isHeroVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        setIsVisible(prev => ({ ...prev, hero: isHeroVisible }));
+      }
+
+      if (timelineRef.current) {
+        const rect = timelineRef.current.getBoundingClientRect();
+        const isTimelineVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        setIsVisible(prev => ({ ...prev, timeline: isTimelineVisible }));
+      }
+
+      if (skillsRef.current) {
+        const rect = skillsRef.current.getBoundingClientRect();
+        const isSkillsVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        setIsVisible(prev => ({ ...prev, skills: isSkillsVisible }));
+      }
+    };
+
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    handleScroll();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  // Animate particles
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setParticles(prevParticles => 
+        prevParticles.map(particle => {
+          let newX = particle.x + particle.speedX;
+          let newY = particle.y + particle.speedY;
+
+          // Wrap around edges
+          if (newX > window.innerWidth + 50) newX = -50;
+          if (newX < -50) newX = window.innerWidth + 50;
+          if (newY > window.innerHeight + 50) newY = -50;
+          if (newY < -50) newY = window.innerHeight + 50;
+
+          return {
+            ...particle,
+            x: newX,
+            y: newY
+          };
+        })
+      );
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const timelineData = [
+    {
+      year: "2020",
+      title: "Full Stack Developer",
+      company: "Tech Innovations Inc.",
+      description: "Led development of enterprise-scale applications using React and Node.js, serving 100k+ users.",
+      technologies: ["React", "Node.js", "MongoDB", "AWS"],
+      type: "work"
+    },
+    {
+      year: "2019",
+      title: "Frontend Developer",
+      company: "Digital Agency Pro",
+      description: "Built responsive web applications for high-profile clients, improving performance by 40%.",
+      technologies: ["Vue.js", "JavaScript", "SASS", "Webpack"],
+      type: "work"
+    },
+    {
+      year: "2018",
+      title: "Junior Developer",
+      company: "StartUp Hub",
+      description: "Developed and maintained multiple client projects, focusing on modern JavaScript frameworks.",
+      technologies: ["JavaScript", "HTML", "CSS", "jQuery"],
+      type: "work"
+    },
+    {
+      year: "2017",
+      title: "Computer Science Degree",
+      company: "University of Technology",
+      description: "Graduated with honors, specializing in Software Engineering and Web Development.",
+      technologies: ["Algorithms", "Data Structures", "Web Development"],
+      type: "education"
+    }
+  ];
+
+  const skillsData = [
+    { name: "React", level: 95, color: "from-blue-400 to-blue-600", icon: "⚛️" },
+    { name: "JavaScript", level: 90, color: "from-yellow-400 to-orange-600", icon: "📜" },
+    { name: "Node.js", level: 85, color: "from-green-400 to-green-600", icon: "🟢" },
+    { name: "TypeScript", level: 80, color: "from-blue-500 to-blue-700", icon: "📘" },
+    { name: "Python", level: 75, color: "from-indigo-400 to-indigo-600", icon: "🐍" },
+    { name: "MongoDB", level: 82, color: "from-green-500 to-emerald-600", icon: "🍃" },
+    { name: "AWS", level: 70, color: "from-orange-400 to-orange-600", icon: "☁️" },
+    { name: "Docker", level: 65, color: "from-cyan-400 to-cyan-600", icon: "🐳" }
+  ];
+
+  // Calculate 3D transforms based on mouse and scroll
+  const calculate3DTransform = () => {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const moveX = (mousePosition.x - centerX) / centerX;
+    const moveY = (mousePosition.y - centerY) / centerY;
+    
+    return {
+      rotateY: moveX * 15,
+      rotateX: -moveY * 15,
+      rotateZ: scrollY * 0.05,
+      translateX: moveX * 10,
+      translateY: moveY * 10
+    };
+  };
+
+  const transform = calculate3DTransform();
+
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-white px-6">
-      <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row items-center gap-12 max-w-6xl mx-auto">
-          {/* Profile Image */}
-          <div className="w-full md:w-1/2">
-            <div className="aspect-video md:aspect-square rounded-2xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center shadow-lg transform hover:rotate-2 transition-transform duration-500">
-               <span className="text-gray-400 text-lg">Profile Image</span>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Animated Gradient Background */}
+      <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 animate-gradientShift">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+      </div>
+
+      {/* Animated Particles */}
+      <div className="fixed inset-0 pointer-events-none">
+        {particles.map(particle => (
+          <div
+            key={particle.id}
+            className="absolute rounded-full"
+            style={{
+              left: `${particle.x}px`,
+              top: `${particle.y}px`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              backgroundColor: `${particle.color}, ${particle.opacity})`,
+              boxShadow: `0 0 ${particle.size * 2}px ${particle.color}, ${particle.opacity / 2})`,
+              transition: 'all 0.05s linear'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 px-6 py-12">
+        <div className="container mx-auto max-w-7xl">
+          
+          {/* Enhanced Hero Section */}
+          <div ref={heroRef} className="flex flex-col lg:flex-row items-center gap-12 mb-20 min-h-screen">
+            
+            {/* Advanced Profile Image with 3D Perspective */}
+            <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
+              <div
+                ref={profileRef}
+                className="relative w-80 h-80 lg:w-96 lg:h-96"
+                style={{
+                  transform: `perspective(1000px) rotateX(${transform.rotateX}deg) rotateY(${transform.rotateY}deg) rotateZ(${transform.rotateZ}deg) translateX(${transform.translateX}px) translateY(${transform.translateY}px)`,
+                  transformStyle: 'preserve-3d',
+                  transition: 'transform 0.1s ease-out'
+                }}
+              >
+                {/* Animated Gradient Border */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-rotateBorder p-1">
+                  <div className="w-full h-full rounded-full bg-gray-900"></div>
+                </div>
+                
+                {/* Inner Glow Ring */}
+                <div className="absolute inset-4 rounded-full bg-gradient-to-r from-blue-600/50 to-purple-600/50 blur-xl animate-pulse"></div>
+                
+                {/* Profile Content */}
+                <div className="absolute inset-8 rounded-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white">
+                  <div className="w-24 h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mb-4 animate-float">
+                    <span className="text-4xl lg:text-5xl">👨‍💻</span>
+                  </div>
+                  <h3 className="text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    John Developer
+                  </h3>
+                  <p className="text-sm lg:text-base text-gray-300">Full Stack Engineer</p>
+                  
+                  {/* Animated Lighting Effect */}
+                  <div 
+                    className="absolute inset-0 rounded-full opacity-30"
+                    style={{
+                      background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.5), transparent 40%)`
+                    }}
+                  />
+                </div>
+
+                {/* Floating Particles Around Profile */}
+                <div className="absolute inset-0 rounded-full">
+                  {[...Array(6)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="absolute w-2 h-2 bg-blue-400 rounded-full animate-pulse"
+                      style={{
+                        top: `${20 + i * 15}%`,
+                        left: `${10 + i * 15}%`,
+                        animationDelay: `${i * 0.5}s`
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Premium Glass Card */}
+            <div className="w-full lg:w-3/5 flex items-center">
+              <div
+                className={`glass-premium rounded-3xl p-8 lg:p-12 shadow-2xl transform transition-all duration-1000 ${
+                  isVisible.hero ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+                }`}
+                style={{
+                  transform: `
+                    perspective(1000px) 
+                    rotateY(${-transform.rotateY * 0.3}deg) 
+                    rotateX(${-transform.rotateX * 0.3}deg)
+                    translateY(${isVisible.hero ? 0 : 80}px)
+                  `,
+                  transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-white">
+                  Hi, I'm a{' '}
+                  <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-gradientShift">
+                    Full-Stack Developer
+                  </span>
+                </h1>
+                
+                <p className="text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed">
+                  I specialize in building modern web applications using React, Node.js, and other cutting-edge technologies. With a strong foundation in both front-end aesthetics and back-end logic, I strive to deliver complete, robust solutions.
+                </p>
+                
+                <p className="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
+                  When I'm not coding, you can find me exploring new tech trends, contributing to open source, or enjoying a good cup of coffee.
+                </p>
+                
+                {/* Premium CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                  <a
+                    href="#projects"
+                    className="relative group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                    <button className="relative px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:scale-105 transition-all duration-300 shadow-lg">
+                      View Projects
+                    </button>
+                  </a>
+                  
+                  <a
+                    href="#contact"
+                    className="relative group"
+                  >
+                    <div className="absolute inset-0 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl"></div>
+                    <button className="relative px-6 py-3 bg-transparent text-white rounded-xl font-bold border-2 border-white/30 hover:border-white/50 hover:bg-white/10 transition-all duration-300">
+                      Contact Me
+                    </button>
+                  </a>
+                </div>
+                
+                {/* Stats Cards */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
+                    <h3 className="font-bold text-3xl text-blue-400 mb-1">5+</h3>
+                    <p className="text-gray-300">Years Experience</p>
+                  </div>
+                  <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
+                    <h3 className="font-bold text-3xl text-purple-400 mb-1">50+</h3>
+                    <p className="text-gray-300">Projects Completed</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div className="w-full md:w-1/2">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-gray-800">
-              Hi, I'm a Full-Stack Developer
-            </h1>
-            <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-              I specialize in building modern web applications using React, Node.js, and other cutting-edge technologies. With a strong foundation in both front-end aesthetics and back-end logic, I strive to deliver complete, robust solutions.
-            </p>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              When I'm not coding, you can find me exploring new tech trends, contributing to open source, or enjoying a good cup of coffee.
-            </p>
+
+          {/* Timeline Section */}
+          <div ref={timelineRef} className="mb-20">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              My Journey
+            </h2>
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 rounded-full"></div>
+              
+              {timelineData.map((item, index) => (
+                <div
+                  key={index}
+                  className={`relative flex items-center mb-12 ${
+                    index % 2 === 0 ? 'justify-start' : 'justify-end'
+                  } ${isVisible.timeline ? 'animate-fadeInUp' : 'opacity-0'}`}
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className={`w-5/12 ${index % 2 === 0 ? 'text-right pr-8' : 'text-left pl-8'}`}>
+                    <div className="glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          item.type === 'work' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'
+                        }`}>
+                          {item.type === 'work' ? '💼 Work' : '🎓 Education'}
+                        </span>
+                        <span className="text-sm text-gray-400">{item.year}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-1">{item.title}</h3>
+                      <p className="text-gray-300 font-medium mb-2">{item.company}</p>
+                      <p className="text-gray-400 text-sm mb-3">{item.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {item.technologies.map((tech, techIndex) => (
+                          <span
+                            key={techIndex}
+                            className="px-2 py-1 bg-white/10 text-gray-300 rounded-lg text-xs"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Timeline dot */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg z-10"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills Section */}
+          <div ref={skillsRef} className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Technical Skills
+            </h2>
             
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <a
-                href="#projects"
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all hover:scale-105 shadow-lg text-center"
-              >
-                View Projects
-              </a>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {skillsData.map((skill, index) => (
+                <div
+                  key={skill.name}
+                  className={`glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer ${
+                    isVisible.skills ? 'animate-fadeInUp' : 'opacity-0'
+                  }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{skill.icon}</span>
+                      <h3 className="font-bold text-white">{skill.name}</h3>
+                    </div>
+                    <span className="text-lg font-semibold text-gray-300">{skill.level}%</span>
+                  </div>
+                  
+                  {/* Progress bar */}
+                  <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className={`absolute top-0 left-0 h-full bg-gradient-to-r ${skill.color} rounded-full transform transition-all duration-1000 ease-out ${
+                        isVisible.skills ? 'scale-x-100' : 'scale-x-0'
+                      } origin-left`}
+                      style={{
+                        width: `${skill.level}%`,
+                        transitionDelay: `${index * 0.1}s`,
+                      }}
+                    >
+                      <div className="absolute inset-0 bg-white/30 animate-pulse"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="text-center py-12">
+            <div className="glass-premium rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Let's Build Something Amazing Together
+              </h2>
+              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+                I'm always excited to work on challenging projects and collaborate with creative minds. Whether you have a project in mind or just want to connect, I'd love to hear from you!
+              </p>
               <a
                 href="#contact"
-                className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:border-blue-600 hover:text-blue-600 transition-all hover:scale-105 text-center"
+                className="inline-block relative group"
               >
-                Contact Me
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                <button className="relative px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:scale-105 transition-all duration-300 shadow-lg">
+                  Get In Touch
+                </button>
               </a>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-bold text-xl text-blue-600 mb-1">5+</h3>
-                <p className="text-gray-600">Years Experience</p>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-bold text-xl text-purple-600 mb-1">50+</h3>
-                <p className="text-gray-600">Projects Completed</p>
-              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes rotateBorder {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-gradientShift {
+          background-size: 200% 200%;
+          animation: gradientShift 4s ease infinite;
+        }
+        
+        .animate-rotateBorder {
+          animation: rotateBorder 8s linear infinite;
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .glass-premium {
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 2px 8px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-premium-secondary {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px) saturate(120%);
+          -webkit-backdrop-filter: blur(10px) saturate(120%);
+          box-shadow: 
+            0 4px 16px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+      `}</style>
+    </div>
   );
 };
 
