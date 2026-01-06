@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import myImage from "../assets/Ghibli.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -95,46 +96,51 @@ const About = () => {
     }
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
-
-
   const timelineData = [
     {
-      year: "2020",
-      title: "Full Stack Developer",
-      company: "Tech Innovations Inc.",
+      year: "2025",
+      title: "Web Developer",
+      company: "K-Win Technologies",
       description:
-        "Led development of enterprise-scale applications using React and Node.js, serving 100k+ users.",
-      technologies: ["React", "Node.js", "MongoDB", "AWS"],
+        "Developed POS front-end and Built admin dashboards with real-time notifications using Socket.io. Contributed to ERP system UIdesign .",
+      technologies: [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Socket.io",
+        "Tailwind CSS",
+        "Mantine",
+        "TypeScript",
+      ],
       type: "work",
+    },
+    {
+      year: "2023",
+      title: "Junior Web Developer",
+      company: "Ga Mone Pwint",
+      description:
+        "Assisted in building front-end components and improving e-commerce site performance. Collaborated withsenior developers to maintain and update the system.",
+      technologies: ["HTML", "JavaScript", "SASS", "CSS"],
+      type: "work",
+    },
+    {
+      year: "2022",
+      title: "Web Developer",
+      company: "Page Myanmar",
+      description:
+        "In OJT, Developed and maintained multiple  projects, focusing on modern JavaScript frameworks.",
+      technologies: ["JavaScript", "HTML", "CSS", "jQuery"],
+      type: "on job training",
     },
     {
       year: "2019",
-      title: "Frontend Developer",
-      company: "Digital Agency Pro",
-      description:
-        "Built responsive web applications for high-profile clients, improving performance by 40%.",
-      technologies: ["Vue.js", "JavaScript", "SASS", "Webpack"],
-      type: "work",
-    },
-    {
-      year: "2018",
-      title: "Junior Developer",
-      company: "StartUp Hub",
-      description:
-        "Developed and maintained multiple client projects, focusing on modern JavaScript frameworks.",
-      technologies: ["JavaScript", "HTML", "CSS", "jQuery"],
-      type: "work",
-    },
-    {
-      year: "2017",
-      title: "Computer Science Degree",
-      company: "University of Technology",
-      description:
-        "Graduated with honors, specializing in Software Engineering and Web Development.",
+      title: "Computer Science (undergraduate)",
+      company: "University of Computer Studies ,Monywa",
+      description: "Specializing in Software Engineering and Web Development.",
       technologies: ["Algorithms", "Data Structures", "Web Development"],
       type: "education",
     },
@@ -177,12 +183,12 @@ const About = () => {
       color: "from-green-500 to-emerald-600",
       logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
     },
-    {
-      name: "AWS",
-      level: 70,
-      color: "from-orange-400 to-orange-600",
-      logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg",
-    },
+    // {
+    //   name: "AWS",
+    //   level: 70,
+    //   color: "from-orange-400 to-orange-600",
+    //   logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg",
+    // },
     {
       name: "Docker",
       level: 65,
@@ -210,13 +216,11 @@ const About = () => {
   const transform = calculate3DTransform();
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <section id="about" className="relative min-h-screen overflow-hidden">
       {/* Animated Gradient Background */}
       <div className="fixed inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 animate-gradientShift">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
       </div>
-
-
 
       {/* Main Content */}
       <div className="relative z-10 px-6 py-12">
@@ -247,15 +251,16 @@ const About = () => {
 
                 {/* Profile Content */}
                 <div className="absolute inset-8 rounded-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center text-white">
-                  <div className="w-24 h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mb-4 animate-float">
-                    <span className="text-4xl lg:text-5xl">👨‍💻</span>
+                  <div className="w-24 h-24 lg:w-42 lg:h-52 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center mb-4 animate-float">
+                    <img
+                      src={myImage}
+                      alt="Kyaw Min Htet"
+                      className="w-full h-full  rounded-b-full"
+                    />
                   </div>
                   <h3 className="text-xl lg:text-2xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    John Developer
+                    Kyaw Min Htet{" "}
                   </h3>
-                  <p className="text-sm lg:text-base text-gray-300">
-                    Full Stack Engineer
-                  </p>
 
                   {/* Animated Lighting Effect */}
                   <div
@@ -304,16 +309,16 @@ const About = () => {
                 </h1>
 
                 <p className="text-lg lg:text-xl text-gray-300 mb-6 leading-relaxed">
-                  I specialize in building modern web applications using React,
-                  Node.js, and other cutting-edge technologies. With a strong
-                  foundation in both front-end aesthetics and back-end logic, I
-                  strive to deliver complete, robust solutions.
+                  I bridge the gap between design and logic to build
+                  high-performance web applications. Specializing in React and
+                  Node.js, I focus on shipping robust, full-stack solutions that
+                  look as good as they function.
                 </p>
 
                 <p className="text-lg lg:text-xl text-gray-300 mb-8 leading-relaxed">
-                  When I'm not coding, you can find me exploring new tech
-                  trends, contributing to open source, or enjoying a good cup of
-                  coffee.
+                  Beyond the code, I’m an open-source contributor, tech trend
+                  seeker, and a firm believer that most problems can be solved
+                  with better logic and a great cup of coffee.
                 </p>
 
                 {/* Premium CTA Buttons */}
@@ -337,13 +342,13 @@ const About = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
                     <h3 className="font-bold text-3xl text-blue-400 mb-1">
-                      5+
+                      1+
                     </h3>
                     <p className="text-gray-300">Years Experience</p>
                   </div>
                   <div className="glass-premium-secondary rounded-2xl p-6 border border-white/10 hover:scale-105 transition-all duration-300">
                     <h3 className="font-bold text-3xl text-purple-400 mb-1">
-                      50+
+                      20+
                     </h3>
                     <p className="text-gray-300">Projects Completed</p>
                   </div>
@@ -422,19 +427,21 @@ const About = () => {
               Technical Skills
             </h2>
 
-             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-               {skillsData.map((skill, index) => (
-                 <div
-                   key={skill.name}
-                   ref={(el) => (skillItemsRef.current[index] = el)}
-                   className="glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center"
-                 >
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {skillsData.map((skill, index) => (
+                <div
+                  key={skill.name}
+                  ref={(el) => (skillItemsRef.current[index] = el)}
+                  className="glass-premium rounded-2xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center"
+                >
                   <img
                     src={skill.logo}
                     alt={skill.name}
                     className="w-12 h-12 mb-3"
                   />
-                  <h3 className="font-bold text-white text-center">{skill.name}</h3>
+                  <h3 className="font-bold text-white text-center">
+                    {skill.name}
+                  </h3>
                 </div>
               ))}
             </div>
@@ -462,9 +469,8 @@ const About = () => {
         </div>
       </div>
 
-       {/* Custom Styles */}
-       <style jsx>{`
-
+      {/* Custom Styles */}
+      <style jsx>{`
         @keyframes gradientShift {
           0% {
             background-position: 0% 50%;
@@ -533,7 +539,7 @@ const About = () => {
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
       `}</style>
-    </div>
+    </section>
   );
 };
 

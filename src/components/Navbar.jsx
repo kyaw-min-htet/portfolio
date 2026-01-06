@@ -36,7 +36,7 @@ const Navbar = () => {
   }, []);
 
   const toggleDarkMode = useCallback(() => {
-    setIsDarkMode(prev => !prev);
+    setIsDarkMode((prev) => !prev);
     const newDarkMode = !isDarkMode;
     if (newDarkMode) {
       document.documentElement.classList.add("dark");
@@ -50,7 +50,7 @@ const Navbar = () => {
   // Active section detection
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["home", "projects", "contact"];
+      const sections = ["about", "projects", "contact"];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -124,28 +124,19 @@ const Navbar = () => {
         setIsMobileMenuOpen(false);
       }
 
-if (e.altKey) {
-      switch(e.key) {
-        case '1':
-          document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
-          break;
-        case '2':
-          document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-          break;
-        case '3':
-          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-          break;
-          case "2":
+      if (e.altKey) {
+        switch (e.key) {
+          case "1":
             document
               .getElementById("about")
               ?.scrollIntoView({ behavior: "smooth" });
             break;
-          case "3":
+          case "2":
             document
               .getElementById("projects")
               ?.scrollIntoView({ behavior: "smooth" });
             break;
-          case "4":
+          case "3":
             document
               .getElementById("contact")
               ?.scrollIntoView({ behavior: "smooth" });
@@ -518,7 +509,7 @@ if (e.altKey) {
   };
 
   const navLinks = [
-    { title: "About", href: "#home" },
+    { title: "About", href: "#about" },
     { title: "Projects", href: "#projects" },
     { title: "Contact", href: "#contact" },
   ];
@@ -555,16 +546,16 @@ if (e.altKey) {
           }`}
         >
           {/* Logo */}
-<a
-          href="#home"
-          className="relative group focus-visible:focus"
-          tabIndex={0}
-          aria-label="Portfolio - Navigate to about section"
-        >
-          <span className="relative text-xl md:text-2xl font-bold text-gray-900 dark:text-white transform hover:scale-105 transition-all duration-300 inline-block">
-            Portfolio.
-          </span>
-        </a>
+          <a
+            href="#about"
+            className="relative group focus-visible:focus"
+            tabIndex={0}
+            aria-label="Portfolio - Navigate to about section"
+          >
+            <span className="relative text-xl md:text-2xl font-bold text-gray-900 dark:text-white transform hover:scale-105 transition-all duration-300 inline-block">
+              MT Dev
+            </span>
+          </a>
 
           {/* Dark Mode Toggle */}
           <button
@@ -604,32 +595,37 @@ if (e.altKey) {
           >
             {navLinks.map((link, index) => (
               <li key={link.title}>
-                 <a
-                   ref={(el) => {
-                     linkRefs.current[index] = el;
-                     if (el && hoveredLink === index) {
-                       const effect = calculateMagneticEffect(el, mousePosition.x, mousePosition.y);
-                       el.style.transform = `translate(${effect.x}px, ${effect.y}px)`;
-                     } else if (el) {
-                       el.style.transform = "translate(0, 0)";
-                     }
-                   }}
-                   href={link.href}
-                   className={`relative px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus ${
-                     hoveredLink !== null ? "staggered-link" : ""
-                   } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20" : "hover:bg-gray-100/50 dark:hover:bg-white/10"}`}
-                   onMouseEnter={() => handleLinkHover(index)}
-                   aria-label={`Navigate to ${link.title} section (Alt+${index + 1})`}
-                   tabIndex={0}
-                 >
+                <a
+                  ref={(el) => {
+                    linkRefs.current[index] = el;
+                    if (el && hoveredLink === index) {
+                      const effect = calculateMagneticEffect(
+                        el,
+                        mousePosition.x,
+                        mousePosition.y
+                      );
+                      el.style.transform = `translate(${effect.x}px, ${effect.y}px)`;
+                    } else if (el) {
+                      el.style.transform = "translate(0, 0)";
+                    }
+                  }}
+                  href={link.href}
+                  className={`relative px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus ${
+                    hoveredLink !== null ? "staggered-link" : ""
+                  } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20" : "hover:bg-gray-100/50 dark:hover:bg-white/10"}`}
+                  onMouseEnter={() => handleLinkHover(index)}
+                  aria-label={`Navigate to ${link.title} section (Alt+${index + 1})`}
+                  tabIndex={0}
+                >
                   <span className="relative z-10">{link.title}</span>
                 </a>
               </li>
             ))}
             <li className="ml-2">
-              <button
+              <a
+                href="#contact"
                 onClick={createRipple}
-                className="relative px-4 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 overflow-hidden focus-visible:focus"
+                className="relative px-4 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 overflow-hidden focus-visible:focus inline-block"
                 aria-label="Contact us - Navigate to contact section"
               >
                 <span className="relative z-10">Let's Talk</span>
@@ -645,7 +641,7 @@ if (e.altKey) {
                     }}
                   />
                 ))}
-              </button>
+              </a>
             </li>
           </ul>
 
@@ -801,11 +797,11 @@ if (e.altKey) {
               <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
                 Keyboard Shortcuts
               </h4>
-<div className="space-y-1 text-xs text-gray-500 dark:text-gray-500">
-              <div>Alt + 1-3: Navigate sections</div>
-              <div>Alt + D: Toggle dark mode</div>
-              <div>Esc: Close mobile menu</div>
-            </div>
+              <div className="space-y-1 text-xs text-gray-500 dark:text-gray-500">
+                <div>Alt + 1-3: Navigate sections</div>
+                <div>Alt + D: Toggle dark mode</div>
+                <div>Esc: Close mobile menu</div>
+              </div>
             </div>
           </div>
         </div>
