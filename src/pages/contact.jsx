@@ -138,7 +138,6 @@ const Contact = () => {
   const socialLinks = [
     {
       name: "GitHub",
-      emoji: "💻",
       icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
       url: "https://github.com/kyaw-min-htet",
       hoverEmoji: "🚀",
@@ -146,7 +145,6 @@ const Contact = () => {
     },
     {
       name: "LinkedIn",
-      emoji: "💼",
       icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg",
       url: "https://www.linkedin.com/in/kyaw-min-htet-4b2a97311/",
       hoverEmoji: "🌟",
@@ -154,16 +152,15 @@ const Contact = () => {
     },
     {
       name: "Facebook",
-      emoji: "📘",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg",
+      icon: "https://cdn.simpleicons.org/facebook",
       url: "https://www.facebook.com/sai.kaung.hein.2025/",
       hoverEmoji: "👥",
       color: "hover:text-blue-100 hover:bg-blue-500",
     },
     {
       name: "Telegram",
-      emoji: "✈️",
-      icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/telegram/telegram-original.svg",
+      // emoji: "✈️",
+      icon: "https://www.svgrepo.com/show/452115/telegram.svg",
       url: "https://t.me/@Alien_X01",
       hoverEmoji: "💬",
       color: "hover:text-blue-100 hover:bg-blue-400",
@@ -221,7 +218,7 @@ const Contact = () => {
           <div ref={ctaButtonRef} className="relative inline-block mb-20 group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
             <a
-              href="mailto:kyawminhtet.1dev@gmail.com"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=kyawminhtet.1dev@gmail.com" target="_blank"
               className="relative px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 inline-flex items-center gap-3"
             >
               <span className="text-2xl animate-bounce">💌</span>

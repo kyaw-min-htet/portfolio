@@ -518,7 +518,7 @@ const Navbar = () => {
     <nav
       ref={navRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
-        isScrolled ? "mt-4 mx-4 md:mx-8 lg:mx-12" : "mt-0 mx-0"
+        isScrolled ? "mt-2 mx-2 sm:mx-4 md:mx-8 lg:mx-12" : "mt-0 mx-0"
       }`}
     >
       <div
@@ -541,8 +541,8 @@ const Navbar = () => {
           />
         )}
         <div
-          className={`container mx-auto flex justify-between items-center transition-all duration-500 ${
-            isScrolled ? "px-6 py-3" : "px-6 py-5"
+          className={`container mx-auto flex justify-between items-center transition-all duration-500 px-3 sm:px-4 md:px-6 ${
+            isScrolled ? "py-2 sm:py-3" : "py-3 sm:py-4 md:py-5"
           }`}
         >
           {/* Logo */}
@@ -552,7 +552,7 @@ const Navbar = () => {
             tabIndex={0}
             aria-label="Portfolio - Navigate to about section"
           >
-            <span className="relative text-xl md:text-2xl font-bold text-gray-900 dark:text-white transform hover:scale-105 transition-all duration-300 inline-block">
+            <span className="relative text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white transform hover:scale-105 transition-all duration-300 inline-block whitespace-nowrap">
               MT Dev
             </span>
           </a>
@@ -560,7 +560,7 @@ const Navbar = () => {
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}
-            className="hidden md:flex items-center justify-center w-8 h-8 rounded-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 backdrop-blur-sm transition-all duration-300 focus-visible:focus"
+            className="hidden lg:flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 backdrop-blur-sm transition-all duration-300 focus-visible:focus"
             aria-label="Toggle dark mode"
             title="Toggle dark mode (Alt+D)"
           >
@@ -587,9 +587,51 @@ const Navbar = () => {
             )}
           </button>
 
-          {/* Desktop Menu */}
+          {/* Medium Screen Menu (Tablet) */}
+          <ul className="hidden md:flex lg:hidden items-center space-x-1 sm:space-x-2">
+            {navLinks.map((link) => (
+              <li key={link.title}>
+                <a
+                  href={link.href}
+                  className={`relative px-2 sm:px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus text-xs sm:text-sm ${
+                    activeSection === link.href.substring(1)
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20"
+                      : "hover:bg-gray-100/50 dark:hover:bg-white/10"
+                  }`}
+                  aria-label={`Navigate to ${link.title} section`}
+                  tabIndex={0}
+                >
+                  <span className="relative z-10">{link.title}</span>
+                </a>
+              </li>
+            ))}
+            <li className="ml-1 sm:ml-2">
+              <a
+                href="#contact"
+                onClick={createRipple}
+                className="relative px-3 sm:px-4 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 overflow-hidden focus-visible:focus inline-block text-xs sm:text-sm"
+                aria-label="Contact us - Navigate to contact section"
+              >
+                <span className="relative z-10">Let's Talk</span>
+                {ripples.map((ripple) => (
+                  <span
+                    key={ripple.id}
+                    className="ripple"
+                    style={{
+                      left: ripple.x,
+                      top: ripple.y,
+                      width: ripple.size,
+                      height: ripple.size,
+                    }}
+                  />
+                ))}
+              </a>
+            </li>
+          </ul>
+
+          {/* Desktop Menu (Large Screen) */}
           <ul
-            className="hidden md:flex items-center space-x-2"
+            className="hidden lg:flex items-center space-x-1 sm:space-x-2"
             onMouseEnter={() => handleLinkHover(0)}
             onMouseLeave={handleLinkLeave}
           >
@@ -610,7 +652,7 @@ const Navbar = () => {
                     }
                   }}
                   href={link.href}
-                  className={`relative px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus ${
+                  className={`relative px-2 sm:px-3 py-1.5 rounded-lg text-gray-700 dark:text-gray-300 font-medium transition-all duration-300 hover:scale-105 focus-visible:focus text-sm sm:text-base ${
                     hoveredLink !== null ? "staggered-link" : ""
                   } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20" : "hover:bg-gray-100/50 dark:hover:bg-white/10"}`}
                   onMouseEnter={() => handleLinkHover(index)}
@@ -621,11 +663,11 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
-            <li className="ml-2">
+            <li className="ml-1 sm:ml-2">
               <a
                 href="#contact"
                 onClick={createRipple}
-                className="relative px-4 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 overflow-hidden focus-visible:focus inline-block"
+                className="relative px-3 sm:px-4 py-1.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors duration-300 overflow-hidden focus-visible:focus inline-block text-sm sm:text-base"
                 aria-label="Contact us - Navigate to contact section"
               >
                 <span className="relative z-10">Let's Talk</span>
@@ -646,11 +688,11 @@ const Navbar = () => {
           </ul>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             {/* Dark Mode Toggle Mobile */}
             <button
               onClick={toggleDarkMode}
-              className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 backdrop-blur-sm transition-all duration-300 focus-visible:focus"
+              className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/20 dark:bg-white/10 hover:bg-white/30 dark:hover:bg-white/20 backdrop-blur-sm transition-all duration-300 focus-visible:focus"
               aria-label="Toggle dark mode"
               title="Toggle dark mode"
             >
@@ -678,12 +720,12 @@ const Navbar = () => {
             </button>
 
             <button
-              className="text-gray-700 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100/50 dark:hover:bg-white/10 transition-colors focus-visible:focus"
+              className="text-gray-700 dark:text-gray-300 p-1.5 sm:p-2 rounded-lg hover:bg-gray-100/50 dark:hover:bg-white/10 transition-colors focus-visible:focus"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
             >
-              <div className="relative w-5 h-5">
+              <div className="relative w-5 h-5 sm:w-6 sm:h-6">
                 <span
                   className={`absolute block w-full h-0.5 bg-current transition-all duration-300 ${
                     isMobileMenuOpen ? "rotate-45 top-2" : "top-0"
@@ -706,21 +748,28 @@ const Navbar = () => {
 
         {/* Advanced Mobile Menu - Slide-in Panel */}
         <div
-          className={`md:hidden fixed top-0 right-0 w-80 h-full glass-premium shadow-premium transition-all duration-500 ease-in-out noise-texture ${
+          className={`lg:hidden fixed top-0 right-0 w-full h-full shadow-2xl transition-all duration-500 ease-in-out sm:w-80 sm:max-w-[75vw] border-l border-white/10 ${
             isMobileMenuOpen
               ? "translate-x-0 opacity-100 slide-in-right"
               : "translate-x-full opacity-0 slide-out-right"
           }`}
-          style={{ zIndex: 40 }}
+          style={{ 
+            zIndex: 40,
+            background: isDarkMode 
+              ? 'rgba(10, 15, 28, 0.95)' 
+              : 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+          }}
         >
           {/* Mobile Menu Header */}
-          <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
               Menu
             </h3>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:focus"
+              className="p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:focus"
               aria-label="Close mobile menu"
             >
               <svg
@@ -740,12 +789,12 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Links */}
-          <div className="flex flex-col p-6 space-y-4">
+          <div className="flex flex-col p-4 sm:p-6 space-y-3 sm:space-y-4">
             {navLinks.map((link, index) => (
               <a
                 key={link.title}
                 href={link.href}
-                className={`relative group text-lg font-medium text-gray-700 dark:text-gray-300 transition-all duration-300 hover:scale-105 hover:translate-x-1 flex items-center justify-between ${
+                className={`relative group text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 transition-all duration-300 hover:scale-105 hover:translate-x-1 flex items-center justify-between py-2 ${
                   isMobileMenuOpen ? "staggered-link" : ""
                 } ${activeSection === link.href.substring(1) ? "text-blue-600 dark:text-blue-400" : ""}`}
                 style={{
@@ -763,37 +812,48 @@ const Navbar = () => {
               </a>
             ))}
 
-            <div className="relative my-6">
+            <div className="relative my-4 sm:my-6">
               <div className="absolute inset-0 h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent"></div>
             </div>
 
             {/* Mobile CTA Button */}
-            <div className="gradient-border transform hover:scale-105 transition-all duration-300">
-              <button
-                onClick={createRipple}
-                className="relative block text-center py-3 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-bold transition-all duration-300 overflow-hidden group w-full"
+            <a
+              href="#contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block relative group"
+            >
+              {/* Glow Effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-2xl blur-lg opacity-70 group-active:opacity-100 transition-opacity duration-300"></div>
+              
+              {/* Button */}
+              <div
+                className="relative flex items-center justify-center gap-3 px-6 py-4 rounded-xl overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%)',
+                }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 -translate-x-full group-active:translate-x-full transition-transform duration-700 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                
+                {/* Icon */}
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                
+                {/* Text */}
+                <span className="relative z-10 text-white font-bold text-lg tracking-wide">
                   Let's Talk
                 </span>
-                {ripples.map((ripple) => (
-                  <span
-                    key={ripple.id}
-                    className="ripple"
-                    style={{
-                      left: ripple.x,
-                      top: ripple.y,
-                      width: ripple.size,
-                      height: ripple.size,
-                    }}
-                  />
-                ))}
-              </button>
-            </div>
+                
+                {/* Arrow */}
+                <svg className="w-5 h-5 text-white group-active:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
 
             {/* Keyboard Shortcuts Info */}
-            <div className="mt-8 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            {/* <div className="mt-8 p-4 bg-gray-500 dark:bg-gray-900/50 rounded-lg">
               <h4 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">
                 Keyboard Shortcuts
               </h4>
@@ -802,14 +862,14 @@ const Navbar = () => {
                 <div>Alt + D: Toggle dark mode</div>
                 <div>Esc: Close mobile menu</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div
-            className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+            className="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
             style={{ zIndex: 35 }}
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Close mobile menu overlay"
