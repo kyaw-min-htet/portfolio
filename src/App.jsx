@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import About from './pages/about';
 import Projects from './pages/project';
 import Contact from './pages/contact';
+import { Analytics } from "@vercel/analytics/next"
 
 const App = () => {
   return (
