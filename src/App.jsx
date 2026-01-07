@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import About from './pages/about';
 import Projects from './pages/project';
 import Contact from './pages/contact';
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 const App = () => {
   return (
@@ -14,6 +14,7 @@ const App = () => {
         <Projects />
         <Contact />
       </main>
+      <Analytics />
     </div>
   );
 };

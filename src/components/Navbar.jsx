@@ -764,7 +764,7 @@ const Navbar = () => {
         >
           {/* Mobile Menu Header */}
           <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h3 className="text-base sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent uppercase tracking-widest">
               Menu
             </h3>
             <button
